@@ -14,8 +14,15 @@ class CreateProductsTable extends Migration
     public function up()
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
+            $table->unsignedInteger('supplier_id');
+            $table->string('name');
+            $table->string('unit', 15)->nullable();
+            $table->integer('price');
             $table->timestamps();
+            $table->softDeletes();
+            
+            $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

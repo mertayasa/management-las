@@ -28,6 +28,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix'=>'suppliers','as'=>'suppliers.'], function(){
         // Admin
         Route::get('/', [SupplierController::class, 'index'])->name('admin.index');
+        Route::get('/create', [SupplierController::class, 'create'])->name('admin.create');
+        Route::post('/store', [SupplierController::class, 'store'])->name('admin.store');
+        Route::get('/edit/{supplier}', [SupplierController::class, 'edit'])->name('admin.edit');
+        Route::patch('/update/{supplier}', [SupplierController::class, 'update'])->name('admin.update');
 
         // Owner
     });
