@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,12 +17,39 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['middleware' => 'auth'], function () {
+    Route::group(['prefix'=>'dashboard','as'=>'dashboard.'], function(){
+        // Admin
+        Route::get('/', [DashboardController::class, 'index'])->name('admin');
+
+        // Owner
+    });
+
+    Route::group(['prefix'=>'suppliers','as'=>'suppliers.'], function(){
+        // Admin
+        Route::get('/', [SupplierController::class, 'index'])->name('admin.index');
+
+        // Owner
+    });
+
+    Route::group(['prefix'=>'projects','as'=>'projects.'], function(){
+        // Admin
+        Route::get('/', [ProjectController::class, 'index'])->name('admin.index');
+
+        // Owner
+    });
+
+    Route::group(['prefix'=>'products','as'=>'products.'], function(){
+        // Admin
+        Route::get('/', [ProductController::class, 'index'])->name('admin.index');
+
+        // Owner
+    });
+
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::get('/', function () {
+    return redirect()->route('login');
+});
 
 require __DIR__.'/auth.php';
