@@ -31,8 +31,9 @@ class SupplierController extends Controller{
             $data = $request->all();
             $this->supplierRepository->store($data);
         }catch(Exception $e){
-            return Redirect::back()->withInput()->with(['error' => 'Gagal menyimpan data supplier!']);
             Log::info($e->getMessage());
+            return Redirect::back()->withInput()->with(['error' => 'Gagal menyimpan data supplier!']);
+            
         }
 
         return redirect(route('suppliers.admin.index'))->with(['success' =>  'Berhasil menyimpan data supplier!']);

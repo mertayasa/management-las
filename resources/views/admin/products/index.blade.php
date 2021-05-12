@@ -12,7 +12,7 @@
     </div>
     <p><strong><a href="{{route('dashboard.admin')}}" class='text-decoration-none text-gray-900'>Dashboard</a></strong> / Management Bahan Baku</p>
     <!-- Area Table -->
-    {{-- @include('layouts.flash') --}}
+    @include('layouts.flash')
     <div class="col-12 p-0">
         <div class="card shadow mb-4">
             <!-- Card Body -->
