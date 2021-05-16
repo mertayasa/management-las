@@ -61,7 +61,7 @@ class ProductController extends Controller{
     public function update(Request $request, Product $product){
         try{
             $data = $request->all();
-            $this->supplierRepository->update($data, $product);
+            $this->productRepository->update($data, $product);
         }catch(Exception $e){
             Log::info($e->getMessage());
             return Redirect::back()->withInput()->with(['error' => 'Gagal mengubah data bahan baku!']);
@@ -71,6 +71,13 @@ class ProductController extends Controller{
     }
 
     public function destroy(Product $product){
-        //
+        try{
+            $this->productRepository->destroy($product);
+        }catch(Exception $e){
+            Log::info($e->getMessage());
+            return Redirect::back()->with(['error' => 'Gagal menghapus data bahan baku!']);
+        }
+
+        return redirect(route('products.admin.index'))->with(['success' =>  'Berhasil menghapus data bahan baku!']);
     }
 }
