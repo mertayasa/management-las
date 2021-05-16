@@ -21,4 +21,8 @@ class SupplierRepository{
     public function update($data, $supplier){
         return $supplier->update($data);
     }
+
+    public function destroy($supplier){
+        return $supplier->delete();
+    }
 }

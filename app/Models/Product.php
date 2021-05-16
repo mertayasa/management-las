@@ -11,14 +11,15 @@ class Product extends Model{
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = [
+    public $fillable = [
         'name',
         'price',
         'unit',
         'supplier_id'
     ];
 
-    protected function supplier(){
-        return $this->belongsTo(Supplier::class);
+    public function supplier(){
+        return $this->belongsTo(Supplier::class, 'supplier_id');
     }
+
 }

@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @push('styles')
-    {{-- <link rel="stylesheet" href="{{asset('admin/vendor/datatables_jquery/datatables.css')}}">
-    <link rel="stylesheet" href="{{asset('plugin/sweetalert2/dist/sweetalert2.css')}}">
-    <link rel="stylesheet" href="{{asset('plugin/iCheck/skins/flat/orange.css')}}"> --}}
+    <link rel="stylesheet" href="{{asset('admin/vendor/datatables_jquery/datatables.css')}}">
+    <link rel="stylesheet" href="{{asset('admin/vendor/sweetalert2/dist/sweetalert2.css')}}">
+    {{-- <link rel="stylesheet" href="{{asset('plugin/iCheck/skins/flat/orange.css')}}"> --}}
 @endpush
 
 @section('content')
@@ -26,14 +26,27 @@
                         </div>
                     </div>
                 </div>
-                {{-- {!! $dataTable->table(['width' => '100%']) !!} --}}
+
+
+                <table id="supplierDatatable" class="table" style="width: 100%;">
+                    <thead>
+                        <td><b>No</b></td>
+                        <td><b>Nama</b></td>
+                        <td><b>Telpon</b></td>
+                        <td><b>Alamat</b></td>
+                        <td><b>Aksi</b></td>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+
+
             </div>
         </div>
     </div>
 @endsection
 
 @push('scripts')
-<script src="{{asset('admin/vendor/datatables_jquery/datatables.js')}}"></script>
-<script src="{{asset('plugin/sweetalert2/dist/sweetalert2.js')}}"></script>
-<script src="{{asset('plugin/iCheck/icheck.js')}}"></script>
+<script src="{{asset('admin/vendor/sweetalert2/dist/sweetalert2.js')}}"></script>
+{{-- <script src="{{asset('plugin/iCheck/icheck.js')}}"></script> --}}
+@include('admin.suppliers.datatable')
 @endpush

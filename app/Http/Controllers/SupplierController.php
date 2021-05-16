@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\SupplierDataTable;
 use App\Http\Requests\SupplierRequest;
 use App\Models\Supplier;
 use App\Repositories\SupplierRepository;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 
@@ -20,6 +20,11 @@ class SupplierController extends Controller{
 
     public function index(){
         return view('admin.suppliers.index');
+    }
+
+    public function dataTable(){
+        $suppliers = $this->supplierRepository->getAllData();
+        return SupplierDataTable::set($suppliers);
     }
 
     public function create(){
@@ -59,6 +64,13 @@ class SupplierController extends Controller{
     }
 
     public function destroy(Supplier $supplier){
-        //
+        try{
+            $this->supplierRepository->destroy($supplier);
+        }catch(Exception $e){
+            Log::info($e->getMessage());
+            return Redirect::back()->with(['error' => 'Gagal menghapus data supplier!']);
+        }
+
+        return redirect(route('suppliers.admin.index'))->with(['success' =>  'Berhasil menghapus data supplier!']);
     }
 }

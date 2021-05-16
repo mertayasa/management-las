@@ -29,12 +29,6 @@
     </div>
 @endif
 
-@if($errors)
-    @php
-        Log::channel('user_activity')->error(array('route' => \Request::route()->getName(), 'error' => $errors->all(), 'user' => Auth::user()->id));
-    @endphp
-@endif
-
 @push('scripts')
     <script>
         $(".alert").fadeTo(5000, 500).slideUp(500);

@@ -28,10 +28,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix'=>'suppliers','as'=>'suppliers.'], function(){
         // Admin
         Route::get('/', [SupplierController::class, 'index'])->name('admin.index');
+        Route::get('/datatable', [SupplierController::class, 'dataTable'])->name('admin.datatable');
         Route::get('/create', [SupplierController::class, 'create'])->name('admin.create');
         Route::post('/store', [SupplierController::class, 'store'])->name('admin.store');
         Route::get('/edit/{supplier}', [SupplierController::class, 'edit'])->name('admin.edit');
         Route::patch('/update/{supplier}', [SupplierController::class, 'update'])->name('admin.update');
+        Route::get('/delete/{supplier}', [SupplierController::class, 'destroy'])->name('admin.delete');
 
         // Owner
     });
@@ -46,6 +48,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix'=>'products','as'=>'products.'], function(){
         // Admin
         Route::get('/', [ProductController::class, 'index'])->name('admin.index');
+        Route::get('/datatable', [ProductController::class, 'dataTable'])->name('admin.datatable');
+        Route::get('/create', [ProductController::class, 'create'])->name('admin.create');
+        Route::post('/store', [ProductController::class, 'store'])->name('admin.store');
+        Route::get('/edit/{product}', [ProductController::class, 'edit'])->name('admin.edit');
+        Route::patch('/update/{product}', [ProductController::class, 'update'])->name('admin.update');
+        Route::get('/delete/{product}', [ProductController::class, 'destroy'])->name('admin.delete');
 
         // Owner
     });
