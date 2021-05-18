@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\ProductDataTable;
+use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use App\Repositories\ProductRepository;
 use App\Repositories\SupplierRepository;
@@ -36,7 +37,7 @@ class ProductController extends Controller{
         return view('admin.products.create', compact('suppliers', 'units'));
     }
 
-    public function store(Request $request){
+    public function store(ProductRequest $request){
         try{
             $data = $request->all();
             $this->productRepository->store($data);
@@ -58,7 +59,7 @@ class ProductController extends Controller{
         return view('admin.products.edit', compact('product', 'units', 'supplier'));
     }
 
-    public function update(Request $request, Product $product){
+    public function update(ProductRequest $request, Product $product){
         try{
             $data = $request->all();
             $this->productRepository->update($data, $product);

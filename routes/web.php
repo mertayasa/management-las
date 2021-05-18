@@ -41,6 +41,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix'=>'projects','as'=>'projects.'], function(){
         // Admin
         Route::get('/', [ProjectController::class, 'index'])->name('admin.index');
+        Route::get('/datatable', [ProjectController::class, 'dataTable'])->name('admin.datatable');
+        Route::get('/create', [ProjectController::class, 'create'])->name('admin.create');
+        Route::post('/store', [ProjectController::class, 'store'])->name('admin.store');
+        Route::get('/edit/{product}', [ProjectController::class, 'edit'])->name('admin.edit');
+        Route::patch('/update/{product}', [ProjectController::class, 'update'])->name('admin.update');
+        Route::get('/delete/{product}', [ProjectController::class, 'destroy'])->name('admin.delete');
 
         // Owner
     });
