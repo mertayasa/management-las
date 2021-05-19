@@ -53,6 +53,10 @@ class ProductController extends Controller{
         //
     }
 
+    public function productPrice(Product $product){
+        return $product->price;
+    }
+
     public function edit(Product $product){
         $supplier = $product->supplier->name;
         $units = ['Meter' => 'Meter', 'Kaki' => 'Kaki', 'Fahrenheit' => 'Fahrenheit'];

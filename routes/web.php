@@ -60,6 +60,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/edit/{product}', [ProductController::class, 'edit'])->name('admin.edit');
         Route::patch('/update/{product}', [ProductController::class, 'update'])->name('admin.update');
         Route::get('/delete/{product}', [ProductController::class, 'destroy'])->name('admin.delete');
+        Route::get('/price/{product}', [ProductController::class, 'productPrice'])->name('admin.product_price');
 
         // Owner
     });
