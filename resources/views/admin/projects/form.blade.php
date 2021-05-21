@@ -73,33 +73,33 @@
             {{-- pivot worker --}}
 
             <div class="row mt-3">
-                <div class="col-4">
+                <div class="col-5">
                     <div class="col-12 p-0">
                         {!! Form::label('productName', 'Nama Pegawai') !!}
-                        {!! Form::text('worker[]', null, ['required', 'id' => '', 'class' => $errors->has('worker') ? 'form-control is-invalid' : 'form-control'])!!}
+                        {!! Form::text('worker[]', null, ['required', 'id' => '', 'class' => 'form-control'])!!}
                     </div>
                 </div>
                 <div class="col-2">
                     <div class="col-12 p-0">
                         {!! Form::label('productCount', 'Jumlah Hari Kerja') !!}
-                        {!! Form::number('worker_work_day[]', null, ['required', 'id' => '', 'class' => $errors->has('worker_work_day') ? 'form-control is-invalid' : 'form-control'])!!}
+                        {!! Form::number('worker_work_day[]', 1, ['required', 'id' => '', 'onchange' => 'countSalary(this)', 'onkeyup' => 'countSalary(this)', 'class' => 'form-control work-day'])!!}
                     </div>
                 </div>
                 <div class="col-2">
                     <div class="col-12 p-0">
                         {!! Form::label('productSumPrice', 'Gaji Per Hari') !!}
-                        {!! Form::number('worker_sallary_per_day[]', null, ['required', 'id' => '', 'class' => $errors->has('worker_sallary_per_day') ? 'form-control is-invalid' : 'form-control'])!!}
+                        {!! Form::number('worker_sallary_per_day[]', 0, ['required', 'id' => '', 'onchange' => 'countSalary(this)', 'onkeyup' => 'countSalary(this)', 'class' => 'form-control salary-per-day'])!!}
                     </div>
                 </div>
                 <div class="col-2">
                     <div class="col-12 p-0">
                         {!! Form::label('productSumPrice', 'Total Gaji') !!}
-                        {!! Form::number('worker_total_sallary[]', null, ['required', 'id' => '', 'readonly', 'class' => $errors->has('worker_total_sallary') ? 'form-control is-invalid' : 'form-control'])!!}
+                        {!! Form::number('worker_total_sallary[]', 0, ['required', 'id' => '', 'readonly', 'class' => 'form-control sum-salary'])!!}
                     </div>
                 </div>
-                <div class="col-2 pt-2">
+                <div class="col-1 pt-2">
                     <div class="pt-1"></div>
-                    <button class="btn btn-sm btn-primary mt-4 py-1" type="button" onclick="addNewWorker()">Tambah Pegawai</button>
+                    <button class="btn btn-sm btn-primary mt-4 py-1" type="button" onclick="addNewWorker()">+</button>
                 </div>
             </div>
 
@@ -302,13 +302,8 @@
                 }
             }
 
-            const locale = 'id';
-            const options = {style: 'currency', currency: 'idr', minimumFractionDigits: 0, maximumFractionDigits: 2};
-            const formatter = new Intl.NumberFormat(locale, options);
-
-            productTotalPrice.innerHTML = formatter.format(sumProductPrice)
             productCharge = sumProductPrice
-
+            updateChargePrice('productTotalPrice', productCharge)
             countRABTotalPrice()
         }
 
@@ -321,13 +316,13 @@
             const assemblyChargeTotalElement = document.getElementById('assemblyChargeTotal')
             let assemblyChargeTotal = element.value
 
-            const locale = 'id';
-            const options = {style: 'currency', currency: 'idr', minimumFractionDigits: 0, maximumFractionDigits: 2};
-            const formatter = new Intl.NumberFormat(locale, options);
+            if(assemblyChargeTotal > 0){
+                assemblyCharge = assemblyChargeTotal
+            }else{
+                assemblyCharge = 0
+            }
 
-            assemblyChargeTotalElement.innerHTML = formatter.format(assemblyChargeTotal > 0 ? assemblyChargeTotal : 0)
-            assemblyCharge = assemblyChargeTotal
-
+            updateChargePrice('assemblyChargeTotal', assemblyCharge)
             countRABTotalPrice()
         }
 
@@ -335,13 +330,9 @@
 
         function countRABTotalPrice(){
             const RABTotalPriceElement = document.getElementById('RABTotalPrice')
+            const RABTotalPrice = parseInt(productCharge) + parseInt(assemblyCharge) + parseInt(additionalWorkerCharge)
 
-            const locale = 'id';
-            const options = {style: 'currency', currency: 'idr', minimumFractionDigits: 0, maximumFractionDigits: 2};
-            const formatter = new Intl.NumberFormat(locale, options);
-
-            RABTotalPriceElement.innerHTML = formatter.format(parseInt(productCharge) + parseInt(assemblyCharge))
-            
+            updateChargePrice('RABTotalPrice', RABTotalPrice)
         }
 
 
@@ -359,21 +350,85 @@
         function deleteWorker(element){
             const workerDiv = element.parentElement.parentElement
             workerDiv.remove()
+            countTotalSalary()
         }
 
         function hideOrShowWorker(){
-            let element = document.getElementById('projectType')
-            let workerMainContainer = document.getElementById('workerMainContainer')
+            const element = document.getElementById('projectType')
+            const workerMainContainer = document.getElementById('workerMainContainer')
 
             if(element.value == 1){
+                const sumSalaryColumn = workerMainContainer.querySelectorAll('.sum-salary')
+                let sumSalaryCount = 0
+
+                for (var i = 0; i < sumSalaryColumn.length; i++) {
+                    let sumValue = sumSalaryColumn.item(i).value
+                    if(sumValue.length > 0){
+                        sumSalaryCount = parseInt(sumSalaryCount) + parseInt(sumValue)
+                    }
+                }
+
                 workerMainContainer.classList.remove('d-none')
                 withAdditionalWorker = 1
+                updateChargePrice('workerChargeTotal', sumSalaryCount)
+                additionalWorkerCharge = sumSalaryCount
+                countRABTotalPrice()
             }
 
             if(element.value == 0){
                 workerMainContainer.classList.add('d-none')
                 withAdditionalWorker = 0
+                additionalWorkerCharge = 0
+
+                updateChargePrice('workerChargeTotal', 0)
+                countRABTotalPrice()
             }
+        }
+
+        function countSalary(element){
+            const workColumn = element.parentElement.parentElement.parentElement.querySelectorAll('.work-day')[0];
+            const salaryDayColumn = element.parentElement.parentElement.parentElement.querySelectorAll('.salary-per-day')[0];
+            const sumSalaryColumn = element.parentElement.parentElement.parentElement.querySelectorAll('.sum-salary')[0];
+
+            if(salaryDayColumn.value >= 0 && salaryDayColumn.value.length > 0){
+                let sumSalary = parseInt(workColumn.value) * parseInt(salaryDayColumn.value)
+                sumSalaryColumn.value = sumSalary
+            }else{
+                let sumSalary = 0
+                sumSalaryColumn.value = sumSalary
+            }
+
+            countTotalSalary()
+
+        }
+
+        function countTotalSalary(){
+            const sumSalaryElement = document.querySelectorAll('.sum-salary')
+            const workerChargeTotal = document.getElementById('workerChargeTotal')
+            let sumSalary = 0
+
+            for (var i = 0; i < sumSalaryElement.length; i++) {
+                let sumValue = sumSalaryElement.item(i).value
+                if(sumValue.length > 0){
+                    sumSalary = parseInt(sumSalary) + parseInt(sumValue)
+                }
+            }
+
+            additionalWorkerCharge = sumSalary
+            updateChargePrice('workerChargeTotal', additionalWorkerCharge)
+            countRABTotalPrice()
+        }
+
+        // ===========Set number locale=======================================================================================
+
+        function updateChargePrice(id, sumCharge){
+            const chargeElement = document.getElementById(id)
+
+            const locale = 'id';
+            const options = {style: 'currency', currency: 'idr', minimumFractionDigits: 0, maximumFractionDigits: 2};
+            const formatter = new Intl.NumberFormat(locale, options);
+
+            chargeElement.innerHTML = formatter.format(sumCharge)
         }
 
         // ===========Form Submit JS, actually it's JQuery=======================================================================================
