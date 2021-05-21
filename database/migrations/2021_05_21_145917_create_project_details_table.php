@@ -14,10 +14,10 @@ class CreateProjectDetailsTable extends Migration
     public function up()
     {
         Schema::create('project_details', function (Blueprint $table) {
-            $table->unsignedInteger('id');
+            $table->increments('id');
             $table->unsignedInteger('project_id');
             $table->unsignedInteger('product_id');
-            $table->integer('product_price')->unsigned();
+            $table->integer('product_price');
             $table->timestamps();
 
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade')->onUpdate('cascade');

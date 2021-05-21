@@ -11,6 +11,7 @@ class ProjectDetail extends Model{
     protected $fillable = [
         'project_id',
         'product_id',
-        'product_price'
+        'product_price',
+        'product_amount'
     ];
 }

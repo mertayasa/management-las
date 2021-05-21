@@ -2,17 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdditionalWorker;
 use App\Models\Project;
+use App\Models\ProjectDetail;
+use App\Repositories\AdditionalWorkerRepository;
 use App\Repositories\ProductRepository;
+use App\Repositories\ProjectDetailRepository;
+use App\Repositories\ProjectRepository;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Queue\Worker;
 use Illuminate\Support\Facades\Log;
 
 class ProjectController extends Controller
 {
     protected $productRepository;
+    protected $projectRepository;
+    protected $projectDetailRepository;
+    protected $additionalWorkerRepository;
 
-    public function __construct(ProductRepository $productRepo){
+    public function __construct(ProductRepository $productRepo, ProjectRepository $projectRepo, ProjectDetailRepository $projectDetailRepo, AdditionalWorkerRepository $additionalWorkerRepo){
         $this->productRepository = $productRepo;
+        $this->projectRepository = $projectRepo;
+        $this->projectDetailRepository = $projectDetailRepo;
+        $this->additionalWorkerRepository = $additionalWorkerRepo;
     }
 
     public function index(){
@@ -31,10 +44,33 @@ class ProjectController extends Controller
     }
 
     public function store(Request $request){
-        Log::info($request->all());
-        $data = $request->all();
-        // Project::create($data);
-        return response($request->all(), 200);
+        try{
+            $data = $request->all();
+            $new_project = $this->projectRepository->store($data);
+            $workers = [];
+            $products = [];
+            
+            foreach($data as $key => $value){
+                if(str_contains($key, 'worker')){
+                    array_push($workers, $value);
+                }
+    
+                if(str_contains($key, 'product')){
+                    array_push($products, $value);
+                }
+            }
+            
+            if($data['type'] == 1){
+                $this->additionalWorkerRepository->store($workers, $new_project->id);
+            }
+    
+            $this->projectDetailRepository->store($products, $new_project->id);
+    
+            return response(['code' => 1]);
+        }catch(Exception $e){
+            Log::info($e->getMessage());
+            return response(['code' => 0]);
+        }
     }
 
     public function show(Project $project){

@@ -82,19 +82,19 @@
                 <div class="col-2">
                     <div class="col-12 p-0">
                         {!! Form::label('productCount', 'Jumlah Hari Kerja') !!}
-                        {!! Form::number('worker_work_day[]', 1, ['required', 'id' => '', 'onchange' => 'countSalary(this)', 'onkeyup' => 'countSalary(this)', 'class' => 'form-control work-day'])!!}
+                        {!! Form::number('worker[]', 1, ['required', 'id' => '', 'onchange' => 'countSalary(this)', 'onkeyup' => 'countSalary(this)', 'class' => 'form-control work-day'])!!}
                     </div>
                 </div>
                 <div class="col-2">
                     <div class="col-12 p-0">
                         {!! Form::label('productSumPrice', 'Gaji Per Hari') !!}
-                        {!! Form::number('worker_sallary_per_day[]', 0, ['required', 'id' => '', 'onchange' => 'countSalary(this)', 'onkeyup' => 'countSalary(this)', 'class' => 'form-control salary-per-day'])!!}
+                        {!! Form::number('worker[]', 0, ['required', 'id' => '', 'onchange' => 'countSalary(this)', 'onkeyup' => 'countSalary(this)', 'class' => 'form-control salary-per-day'])!!}
                     </div>
                 </div>
                 <div class="col-2">
                     <div class="col-12 p-0">
                         {!! Form::label('productSumPrice', 'Total Gaji') !!}
-                        {!! Form::number('worker_total_sallary[]', 0, ['required', 'id' => '', 'readonly', 'class' => 'form-control sum-salary'])!!}
+                        {!! Form::number('worker[]', 0, ['required', 'id' => '', 'readonly', 'class' => 'form-control sum-salary'])!!}
                     </div>
                 </div>
                 <div class="col-1 pt-2">
@@ -212,6 +212,7 @@
         $('.initSelect2').select2({ theme: 'bootstrap4'});
 
         let productFieldCount = 1
+        let salaryFieldCount = 1
         let withAdditionalWorker = 0
         let additionalWorkerCharge = 0
         let productCharge = 0
@@ -343,7 +344,13 @@
             const rowWorkerElement = document.getElementById('pivotWorker').nextElementSibling
             const clone = rowWorkerElement.cloneNode(true);
             const workerContainer = document.getElementById('workerContainer')
+            const clonedInput = clone.querySelectorAll('input')
             clone.classList.remove('d-none')
+
+            clonedInput.forEach(function(input) {
+                input.setAttribute('name', `worker${salaryFieldCount+1}[]`)
+            });
+
             workerContainer.appendChild(clone)
         }
 

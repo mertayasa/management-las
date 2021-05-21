@@ -15,4 +15,5 @@ class AdditionalWorker extends Model
         'work_day',
         'salary_per_day'
     ];
+    
 }
