@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\ProjectDataTable;
 use App\Models\AdditionalWorker;
 use App\Models\Project;
 use App\Models\ProjectDetail;
@@ -29,7 +30,13 @@ class ProjectController extends Controller
     }
 
     public function index(){
+        // dd($this->projectRepository->model()->additionalWorker);
         return view('admin.projects.index');
+    }
+
+    public function dataTable(){
+        $projects = $this->projectRepository->getAllData();
+        return ProjectDataTable::set($projects);
     }
 
     public function create(){
@@ -40,7 +47,9 @@ class ProjectController extends Controller
             $products[$product->id] = '['. $product->supplier->name. ']  '. $product->name;
         }
 
-        return view('admin.projects.create', compact('products'));
+        $display = 'd-none';
+
+        return view('admin.projects.create', compact('products', 'display'));
     }
 
     public function store(Request $request){
@@ -65,11 +74,13 @@ class ProjectController extends Controller
             }
     
             $this->projectDetailRepository->store($products, $new_project->id);
+            session()->flash('success', 'Berhasil menambahkan proyek');
     
-            return response(['code' => 1]);
+            return response(['code' => 1, 'url' => route('projects.admin.index')]);
         }catch(Exception $e){
             Log::info($e->getMessage());
-            return response(['code' => 0]);
+            session()->flash('error', 'Gagal menambahkan proyek');
+            return response(['code' => 0, 'url' => 'reload']);
         }
     }
 
@@ -78,7 +89,16 @@ class ProjectController extends Controller
     }
 
     public function edit(Project $project){
-        //
+        $products_raw = $this->productRepository->getAllData();
+        $products_raw->SortByDesc('supplier_id');
+        $products = [];
+        foreach($products_raw as $product){
+            $products[$product->id] = '['. $product->supplier->name. ']  '. $product->name;
+        }
+
+        $display = $project->type == 0 ? 'd-none' : 'd-block';
+
+        return view('admin.projects.edit', compact('project', 'products', 'display'));
     }
 
     public function update(Request $request, Project $project){

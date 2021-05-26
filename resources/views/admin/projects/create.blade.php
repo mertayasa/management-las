@@ -19,16 +19,6 @@
             {{-- <button class="btn btn-warning mb-3 w-100" type="submit">Simpan Proyek</button> --}}
             <button class="btn btn-primary mt-3 w-100" type="submit" id="submitFormBtn">Simpan Proyek</button>
         </div>
-        {{-- <div class="col-4">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3 d-flex flex-row align-items-center">
-                    Aksi
-                </div>
-                <div class="card-body">
-                    <button class="btn btn-warning w-100" type="submit">Simpan</button>
-                </div>
-            </div>
-        </div> --}}
     </div>
     {!! Form::close() !!}
 

@@ -17,6 +17,7 @@
   @stack('styles')
   <!-- Custom styles for this template-->
   <link href="{{asset('admin/css/sb-admin-2.css')}}" rel="stylesheet">
+  <link href="{{asset('sweetalert2/dist/sweetalert2.css')}}" rel="stylesheet">
 
 </head>
 
@@ -107,8 +108,51 @@
   <!-- Custom scripts for all pages-->
   <script src="{{asset('admin/js/sb-admin-2.min.js')}}"></script>
 
+  <script src="{{asset('sweetalert2/dist/sweetalert2.js')}}"></script>
+
   <!-- Page level plugins -->
   <script src="{{asset('admin/vendor/chart.js/Chart.min.js')}}"></script>
+
+  <script>
+    function deleteModel(deleteUrl, tableId){
+        Swal.fire({
+            title: "Warning",
+            text: "Yakin menghapus data?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#169b6b',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya',
+            cancelButtonText: 'Tidak'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url : deleteUrl,
+                    dataType : "Json",
+                    data : {"_token": "{{ csrf_token() }}"},
+                    method : "get",
+                    success:function(data){
+                        console.log(data)
+                        if(data.code == 1){
+                            Swal.fire(
+                                'Berhasil',
+                                data.message,
+                                'success'
+                        )
+                        }else{
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: data.message
+                            })
+                        }
+                        $('#'+tableId).DataTable().ajax.reload();
+                    }
+                })
+            }
+        })
+      }
+  </script>
 
   <!-- Page level custom scripts -->
   {{-- <script src="{{asset('admin/js/demo/chart-area-demo.js')}}"></script> --}}

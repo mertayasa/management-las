@@ -64,48 +64,54 @@
 
 {{-- <hr> --}}
 {{-- Worker --}}
-<div class="content-link mt-5 d-none" id="workerMainContainer">
+
+<div class="content-link mt-5 {{$display}}" id="workerMainContainer">
     <h4>Pegawai Proyek</h4>
     <hr>
     <div class="row">
         <div class="product-row col-12" id="workerContainer">
-
             {{-- pivot worker --}}
-
-            <div class="row mt-3">
-                <div class="col-5">
-                    <div class="col-12 p-0">
-                        {!! Form::label('productName', 'Nama Pegawai') !!}
-                        {!! Form::text('worker[]', null, ['required', 'id' => '', 'class' => 'form-control'])!!}
+            @if (str_contains(Route::currentRouteName(), 'create'))
+                @include('admin.projects.worker_field')
+            @else
+                @forelse ($project->additionalWorker as $worker)
+                    <div class="row mt-3">
+                        <div class="col-5">
+                            <div class="col-12 p-0">
+                                {!! Form::label('productName', 'Nama Pegawai') !!}
+                                {!! Form::text('worker[]', $worker->name, ['id' => '', 'class' => 'form-control'])!!}
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="col-12 p-0">
+                                {!! Form::label('productCount', 'Jumlah Hari Kerja') !!}
+                                {!! Form::number('worker[]', $worker->work_day, ['id' => '', 'onchange' => 'countSalary(this)', 'onkeyup' => 'countSalary(this)', 'class' => 'form-control work-day'])!!}
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="col-12 p-0">
+                                {!! Form::label('productSumPrice', 'Gaji Per Hari') !!}
+                                {!! Form::number('worker[]', $worker->salary_per_day, ['id' => '', 'onchange' => 'countSalary(this)', 'onkeyup' => 'countSalary(this)', 'class' => 'form-control salary-per-day'])!!}
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="col-12 p-0">
+                                {!! Form::label('productSumPrice', 'Total Gaji') !!}
+                                {!! Form::number('worker[]', $worker->work_day * $worker->salary_per_day, ['id' => '', 'readonly', 'class' => 'form-control sum-salary'])!!}
+                            </div>
+                        </div>
+                        <div class="col-1 pt-2">
+                            <div class="pt-1"></div>
+                            <button class="btn btn-sm btn-primary mt-4 py-1" type="button" onclick="addNewWorker()">+</button>
+                        </div>
                     </div>
-                </div>
-                <div class="col-2">
-                    <div class="col-12 p-0">
-                        {!! Form::label('productCount', 'Jumlah Hari Kerja') !!}
-                        {!! Form::number('worker[]', 1, ['required', 'id' => '', 'onchange' => 'countSalary(this)', 'onkeyup' => 'countSalary(this)', 'class' => 'form-control work-day'])!!}
-                    </div>
-                </div>
-                <div class="col-2">
-                    <div class="col-12 p-0">
-                        {!! Form::label('productSumPrice', 'Gaji Per Hari') !!}
-                        {!! Form::number('worker[]', 0, ['required', 'id' => '', 'onchange' => 'countSalary(this)', 'onkeyup' => 'countSalary(this)', 'class' => 'form-control salary-per-day'])!!}
-                    </div>
-                </div>
-                <div class="col-2">
-                    <div class="col-12 p-0">
-                        {!! Form::label('productSumPrice', 'Total Gaji') !!}
-                        {!! Form::number('worker[]', 0, ['required', 'id' => '', 'readonly', 'class' => 'form-control sum-salary'])!!}
-                    </div>
-                </div>
-                <div class="col-1 pt-2">
-                    <div class="pt-1"></div>
-                    <button class="btn btn-sm btn-primary mt-4 py-1" type="button" onclick="addNewWorker()">+</button>
-                </div>
-            </div>
+                @empty
+                    @include('admin.projects.worker_field')
+                @endforelse
+            @endif
 
         </div>
     </div>
-
 </div>
 
 {{-- <hr> --}}
@@ -115,37 +121,44 @@
     <hr>
     <div class="row">
         <div class="product-row col-12" id="productContainer">
-            <div class="row">
-                <div class="col-5">
-                    <div class="col-12 p-0">
-                        {!! Form::label('productName', 'Nama Barang') !!}
-                        {!! Form::select('product1[]', $products, null, ['required', 'placeholder' => 'Please Select', 'class' => 'form-control product-id initSelect2', 'onchange' => 'findProductPrice(this)']) !!}
+            @if (str_contains(Route::currentRouteName(), 'create'))
+                @include('admin.projects.product_field')
+            @else
+                @forelse ($project->projectDetail as $product)
+                    <div class="row">
+                        <div class="col-5">
+                            <div class="col-12 p-0">
+                                {!! Form::label('productName', 'Nama Barang') !!}
+                                {!! Form::select('product1[]', $products, $product->product_id , ['required', 'placeholder' => 'Please Select', 'class' => 'form-control product-id initSelect2', 'onchange' => 'findProductPrice(this)']) !!}
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="col-12 p-0">
+                                {!! Form::label('productPrice', 'Harga Barang') !!}
+                                {!! Form::number('product1[]', $product->product_price, ['required', 'id' => '', 'readonly', 'class' => $errors->has('product_price') ? 'form-control is-invalid product-price' : 'form-control product-price'])!!}
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="col-12 p-0">
+                                {!! Form::label('productCount', 'Jumlah Barang') !!}
+                                {!! Form::number('product1[]', $product->product_amount, ['required', 'id' => '', 'onchange' => 'countSumPrice(this)', 'onkeyup' => 'countSumPrice(this)', 'onfocusout' => 'setDefaultValue(this)', 'class' => $errors->has('product_count') ? 'form-control is-invalid product-qty' : 'form-control product-qty'])!!}
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="col-12 p-0">
+                                {!! Form::label('productSumPrice', 'Harga X') !!}
+                                {!! Form::number('product1[]', $product->product_price * $product->product_amount, ['required','id' => '', 'readonly', 'class' => $errors->has('product_count') ? 'form-control is-invalid product-sum-price' : 'form-control product-sum-price'])!!}
+                            </div>
+                        </div>
+                        <div class="col-1 pt-2">
+                            <div class="pt-1"></div>
+                            <button class="btn btn-sm btn-primary mt-4 py-1" type="button" onclick="addNewProduct()">+</button>
+                        </div>
                     </div>
-                </div>
-                <div class="col-2">
-                    <div class="col-12 p-0">
-                        {!! Form::label('productPrice', 'Harga Barang') !!}
-                        {!! Form::number('product1[]', null, ['required', 'id' => '', 'readonly', 'class' => $errors->has('product_price') ? 'form-control is-invalid product-price' : 'form-control product-price'])!!}
-                    </div>
-                </div>
-                <div class="col-2">
-                    <div class="col-12 p-0">
-                        {!! Form::label('productCount', 'Jumlah Barang') !!}
-                        {!! Form::number('product1[]', null, ['required', 'id' => '', 'onchange' => 'countSumPrice(this)', 'onkeyup' => 'countSumPrice(this)', 'onfocusout' => 'setDefaultValue(this)', 'class' => $errors->has('product_count') ? 'form-control is-invalid product-qty' : 'form-control product-qty'])!!}
-                    </div>
-                </div>
-                <div class="col-2">
-                    <div class="col-12 p-0">
-                        {!! Form::label('productSumPrice', 'Harga X') !!}
-                        {!! Form::number('product1[]', null, ['required','id' => '', 'readonly', 'class' => $errors->has('product_count') ? 'form-control is-invalid product-sum-price' : 'form-control product-sum-price'])!!}
-                    </div>
-                </div>
-                <div class="col-1 pt-2">
-                    <div class="pt-1"></div>
-                    <button class="btn btn-sm btn-primary mt-4 py-1" type="button" onclick="addNewProduct()">+</button>
-                </div>
-            </div>
-
+                @empty
+                    @include('admin.projects.product_field')
+                @endforelse
+            @endif
         </div>
     </div>
 
@@ -182,23 +195,23 @@
                 <tr>
                     <td class="text-left">Biaya Bahan Baku</td>
                     <td style="width: 30px; text-align:center"> : </td>
-                    <td><span id="productTotalPrice">Rp 0</span></td>
+                    <td><span id="productTotalPrice">{{ isset($project->product_total) ? formatPrice($project->product_total) : 'Rp 0' }}</span></td>
                 </tr>
                 <tr>
                     <td class="text-left">Biaya Pemasangan</td>
                     <td style="width: 30px; text-align:center"> : </td>
-                    <td><span id="assemblyChargeTotal">Rp 0</span></td>
+                    <td><span id="assemblyChargeTotal">{{ isset($project->assembly_charge) ? formatPrice($project->assembly_charge) : 'Rp 0' }}</span></td>
                 </tr>
                 <tr>
                     <td class="text-left">Biaya Tukang</td>
                     <td style="width: 30px; text-align:center"> : </td>
-                    <td><span id="workerChargeTotal">Rp 0</span></td>
+                    <td><span id="workerChargeTotal">{{ isset($project->worker_salary) ? formatPrice($project->worker_salary) : 'Rp 0' }}</span></td>
                 </tr>
 
                 <tr class="border-top">
                     <td class="text-left" style="font-weight: bold">Total Biaya RAB</td>
                     <td style="width: 30px; text-align:center; font-weight: bold"> : </td>
-                    <td style="font-weight: bold"><span id="RABTotalPrice">Rp 0</span></td>
+                    <td style="font-weight: bold"><span id="RABTotalPrice">{{ isset($project->total) ? formatPrice($project->total) : 'Rp 0' }}</span></td>
                 </tr>
             </table>
         </div>
@@ -213,10 +226,20 @@
 
         let productFieldCount = 1
         let salaryFieldCount = 1
-        let withAdditionalWorker = 0
-        let additionalWorkerCharge = 0
-        let productCharge = 0
-        let assemblyCharge = 0
+        @if(str_contains(Route::currentRouteName(), 'edit'))
+            @if($project->type == 0)
+                let withAdditionalWorker = 0
+            @else
+                let withAdditionalWorker = 1
+            @endif
+            let additionalWorkerCharge = "{{$project->worker_salary}}"
+            let productCharge = "{{$project->product_total}}"
+            let assemblyCharge = "{{$project->assembly_charge}}"
+        @else
+            let additionalWorkerCharge = 0
+            let productCharge = 0
+            let assemblyCharge = 0
+        @endif
 
         // ===========Product JS=============================================================================================================
 
@@ -363,6 +386,8 @@
         function hideOrShowWorker(){
             const element = document.getElementById('projectType')
             const workerMainContainer = document.getElementById('workerMainContainer')
+            const workerInputField = workerMainContainer.querySelectorAll('input')
+            // console.log(workerInputField)
 
             if(element.value == 1){
                 const sumSalaryColumn = workerMainContainer.querySelectorAll('.sum-salary')
@@ -373,6 +398,10 @@
                     if(sumValue.length > 0){
                         sumSalaryCount = parseInt(sumSalaryCount) + parseInt(sumValue)
                     }
+                }
+
+                for (let input = 0; input < workerInputField.length; input++) {
+                    workerInputField[input].setAttribute('required', 'required')
                 }
 
                 workerMainContainer.classList.remove('d-none')
@@ -386,6 +415,10 @@
                 workerMainContainer.classList.add('d-none')
                 withAdditionalWorker = 0
                 additionalWorkerCharge = 0
+
+                for (let input = 0; input < workerInputField.length; input++) {
+                    workerInputField[input].removeAttribute('required')
+                }
 
                 updateChargePrice('workerChargeTotal', 0)
                 countRABTotalPrice()
@@ -441,19 +474,27 @@
         // ===========Form Submit JS, actually it's JQuery=======================================================================================
 
         $('#newProjectForm').on('submit', function(event){
-            event.preventDefault();
+            event.preventDefault()
             $.ajax({
                 url:'{{route('projects.admin.store')}}',
                 method:'post',
                 data:$(this).serialize(),
                 dataType:'json',
                 beforeSend:function(){
-                    $('#submitFormBtn').attr('disabled','disabled');
+                    $('#submitFormBtn').attr('disabled','disabled')
                 },
                 success:function(data)
                 {
                     console.log(data)
-                    $('#submitFormBtn').attr('disabled', false);
+                    if(data.code = 1){
+                        window.location.href = data.url
+                    }
+
+                    if(data.code = 0){
+                        window.location.reload()
+                    }
+
+                    $('#submitFormBtn').attr('disabled', false)
                 }
             })
         });

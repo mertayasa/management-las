@@ -2,7 +2,7 @@
 <script>
     let table
     let url = "{{ route('products.admin.datatable') }}"
-    console.log(`datatable suppliers ${url}`)
+    // console.log(`datatable suppliers ${url}`)
     datatable(url)
 
     function datatable (url){

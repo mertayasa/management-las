@@ -80,9 +80,9 @@ class ProductController extends Controller{
             $this->productRepository->destroy($product);
         }catch(Exception $e){
             Log::info($e->getMessage());
-            return Redirect::back()->with(['error' => 'Gagal menghapus data bahan baku!']);
+            return response(['code' => 0, 'message' => 'Gagal menghapus bahan baku']);
         }
 
-        return redirect(route('products.admin.index'))->with(['success' =>  'Berhasil menghapus data bahan baku!']);
+        return response(['code' => 1, 'message' => 'Berhasil menghapus bahan baku']);
     }
 }

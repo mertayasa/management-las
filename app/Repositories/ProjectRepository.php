@@ -10,6 +10,10 @@ class ProjectRepository{
         $this->project = $project;
     }
 
+    public function model(){
+        return $this->project;
+    }
+
     public function getAllData(){
         return $this->project->get();
     }
