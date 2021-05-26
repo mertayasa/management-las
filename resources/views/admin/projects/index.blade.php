@@ -2,8 +2,6 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{asset('admin/vendor/datatables_jquery/datatables.css')}}">
-    {{-- <link rel="stylesheet" href="{{asset('plugin/sweetalert2/dist/sweetalert2.css')}}">
-    <link rel="stylesheet" href="{{asset('plugin/iCheck/skins/flat/orange.css')}}"> --}}
 @endpush
 
 @section('content')
@@ -21,7 +19,6 @@
                     <div class="row">
                         <div class="col-6 align-items-start">
                             <a href="{{route('projects.admin.create')}}" type="button" class="btn btn-warning mb-3 mr-2">+ Tambah Data</a>
-                            {{-- <button type="button" class="btn btn-warning mb-3 mr-2">+ Tambah Data</button> --}}
                         </div>
                         <div class="col-6 d-flex">
                         </div>
@@ -51,7 +48,7 @@
         </div>
     </div>
   
-    <!-- Modal -->
+    {{-- <!-- Modal -->
     <div class="modal fade" id="projectProgressModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -72,44 +69,68 @@
                 {!! Form::close() !!}
         </div>
         </div>
-    </div>
+    </div> --}}
 @endsection
 
 @push('scripts')
 <script src="{{asset('admin/vendor/datatables_jquery/datatables.js')}}"></script>
-{{-- <script src="{{asset('plugin/sweetalert2/dist/sweetalert2.js')}}"></script> --}}
-{{-- <script src="{{asset('plugin/iCheck/icheck.js')}}"></script> --}}
 @include('admin.projects.datatable')
 <script>
-    function updateProjectProgress(progress){
-        const projectProgress = document.getElementById('projectProgress')
-        const selectOption = projectProgress.querySelector(`option[value="${progress}"]`).setAttribute('selected', true)
-    }
 
-    $('#projectProgress').on('submit', function(event){
-        event.preventDefault()
+    function updateStatusProyek(update, modelId){
+        const url = "{{url('projects/update-progress')}}" + '/' + modelId
+        console.log(url)
         $.ajax({
-            url:'{{route('projects.admin.store')}}',
-            method:'post',
-            data:$(this).serialize(),
+            url:url,
+            method:'patch',
+            data:{"progress": update, "_token": "{{ csrf_token() }}"},
             dataType:'json',
             beforeSend:function(){
-                $('#updateProgressBtn').attr('disabled','disabled')
+                console.log('begin update')
             },
             success:function(data)
             {
                 console.log(data)
                 if(data.code = 1){
-                    window.location.href = data.url
+                    console.log('success')
                 }
 
                 if(data.code = 0){
-                    window.location.reload()
+                    console.log('fail')
                 }
-
-                $('#updateProgressBtn').attr('disabled', false)
             }
         })
-    });
+    }
+
+    // function updateProjectProgress(progress){
+    //     const projectProgress = document.getElementById('projectProgress')
+    //     const selectOption = projectProgress.querySelector(`option[value="${progress}"]`).setAttribute('selected', true)
+    // }
+
+    // $('#projectProgress').on('submit', function(event){
+    //     event.preventDefault()
+    //     $.ajax({
+    //         url:'{{route('projects.admin.store')}}',
+    //         method:'post',
+    //         data:$(this).serialize(),
+    //         dataType:'json',
+    //         beforeSend:function(){
+    //             $('#updateProgressBtn').attr('disabled','disabled')
+    //         },
+    //         success:function(data)
+    //         {
+    //             console.log(data)
+    //             if(data.code = 1){
+    //                 window.location.href = data.url
+    //             }
+
+    //             if(data.code = 0){
+    //                 window.location.reload()
+    //             }
+
+    //             $('#updateProgressBtn').attr('disabled', false)
+    //         }
+    //     })
+    // });
 </script>
 @endpush

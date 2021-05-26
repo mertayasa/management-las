@@ -104,7 +104,7 @@ class ProjectController extends Controller
     public function update(Request $request, Project $project){
         try{
             $data = $request->all();
-            $new_project = $this->projectRepository->update($data, $project);
+            $update_project = $this->projectRepository->update($data, $project);
             $workers = [];
             $products = [];
             
@@ -134,6 +134,17 @@ class ProjectController extends Controller
             session()->flash('error', 'Gagal mengubah proyek');
             return response(['code' => 0, 'url' => 'reload']);
         }
+    }
+
+    public function updateProgress(Request $request, Project $project){
+        try{
+            $data = $request->all();
+            $this->projectRepository->update($data, $project);
+        }catch(Exception $e){
+            Log::info($e->getMessage());
+            return response(['code' => 0]);
+        }
+        return response(['code' => 1]);
     }
 
     public function destroy(Project $project){

@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use Carbon\Carbon;
+use Collective\Html\FormFacade;
 use Yajra\DataTables\DataTables;
 
 class ProjectDataTable{
@@ -16,7 +17,8 @@ class ProjectDataTable{
                 return 'Harian';
             })
             ->editColumn('progress', function($project){
-                return getProgress($project->progress);
+                // return getProgress($project->progress);
+                return FormFacade::select('type', [0 => 'Proyek Baru', 1 => 'Pembelian Bahan', 2 => 'Pengerjaan', 3 => 'Pemasangan', 4 => 'Selesai'], $project->progress, ['id' => 'projectType', 'onchange' => 'updateStatusProyek(this.value, '. $project->id .')', 'class' => 'form-control']);
             })
             ->editColumn('start', function($project){
                 return Carbon::parse($project->start)->format('d-F-Y');
