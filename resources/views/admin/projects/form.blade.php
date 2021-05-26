@@ -412,6 +412,7 @@
             }
 
             if(element.value == 0){
+                workerMainContainer.classList.remove('d-block')
                 workerMainContainer.classList.add('d-none')
                 withAdditionalWorker = 0
                 additionalWorkerCharge = 0
@@ -475,9 +476,17 @@
 
         $('#newProjectForm').on('submit', function(event){
             event.preventDefault()
+            @if(str_contains(Route::currentRouteName(), 'edit'))
+                const url = "{{route('projects.admin.update', $project->id)}}"
+                const method = 'patch'
+            @else
+                const url = "{{route('projects.admin.store')}}"
+                const method = 'post'
+            @endif
+
             $.ajax({
-                url:'{{route('projects.admin.store')}}',
-                method:'post',
+                url: url,
+                method: method,
                 data:$(this).serialize(),
                 dataType:'json',
                 beforeSend:function(){
@@ -485,7 +494,7 @@
                 },
                 success:function(data)
                 {
-                    console.log(data)
+                    // console.log(data)
                     if(data.code = 1){
                         window.location.href = data.url
                     }

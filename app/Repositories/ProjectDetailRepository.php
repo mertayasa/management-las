@@ -14,6 +14,10 @@ class ProjectDetailRepository{
         return $this->project_detail->get();
     }
 
+    public function model(){
+        return $this->project_detail;
+    }
+
     public function store($data, $project_id){
         foreach($data as $product){
             $project_detail = new ProjectDetail();

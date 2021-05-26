@@ -6,7 +6,7 @@
     </div>
     @include('layouts.flash')
     <!-- Area Table -->
-    {!! Form::model($project, ['route' => ['projects.admin.update', $project->id], 'method' => 'patch']) !!}
+    {!! Form::model($project, ['route' => ['projects.admin.update', $project->id], 'method' => 'patch', 'id' => 'newProjectForm']) !!}
     <div class="row">
         <div class="col-12 align-items-start">
             <a class="btn btn-danger mb-3 text-white" href="{{route('projects.admin.index')}}">Kembali</a>

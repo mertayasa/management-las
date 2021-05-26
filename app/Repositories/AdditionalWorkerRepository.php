@@ -14,6 +14,10 @@ class AdditionalWorkerRepository{
         return $this->additional_worker->get();
     }
 
+    public function model(){
+        return $this->additional_worker;
+    }
+
     public function store($data, $project_id){
         foreach($data as $worker){
             $additional_worker = new AdditionalWorker();

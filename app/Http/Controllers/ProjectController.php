@@ -102,10 +102,48 @@ class ProjectController extends Controller
     }
 
     public function update(Request $request, Project $project){
-        //
+        try{
+            $data = $request->all();
+            $new_project = $this->projectRepository->update($data, $project);
+            $workers = [];
+            $products = [];
+            
+            foreach($data as $key => $value){
+                if(str_contains($key, 'worker')){
+                    array_push($workers, $value);
+                }
+    
+                if(str_contains($key, 'product')){
+                    array_push($products, $value);
+                }
+            }
+
+            $this->additionalWorkerRepository->model()->where('project_id', $project->id)->delete();
+            $this->projectDetailRepository->model()->where('project_id', $project->id)->delete();
+            
+            if($data['type'] == 1){
+                $this->additionalWorkerRepository->store($workers, $project->id);
+            }
+    
+            $this->projectDetailRepository->store($products, $project->id);
+            session()->flash('success', 'Berhasil mengubah proyek');
+    
+            return response(['code' => 1, 'url' => route('projects.admin.index')]);
+        }catch(Exception $e){
+            Log::info($e->getMessage());
+            session()->flash('error', 'Gagal mengubah proyek');
+            return response(['code' => 0, 'url' => 'reload']);
+        }
     }
 
     public function destroy(Project $project){
-        //
+        try{
+            $this->projectRepository->destroy($project);
+        }catch(Exception $e){
+            Log::info($e->getMessage());
+            return response(['code' => 0, 'message' => 'Gagal menghapus proyek']);
+        }
+
+        return response(['code' => 1, 'message' => 'Berhasil menghapus proyek']);
     }
 }
