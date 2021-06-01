@@ -48,6 +48,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::patch('/update/{project}', [ProjectController::class, 'update'])->name('admin.update');
         Route::get('/delete/{project}', [ProjectController::class, 'destroy'])->name('admin.delete');
         Route::patch('/update-progress/{project}', [ProjectController::class, 'updateProgress'])->name('admin.update_progress');
+        Route::get('/rab/{project}', [ProjectController::class, 'show'])->name('admin.show_rab');
 
         // Owner
     });

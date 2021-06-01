@@ -41,9 +41,9 @@ class ProjectDataTable{
             ->addColumn('action', function($project){
                 $deleteUrl = "'".route('projects.admin.delete', $project->id)."', 'projectDatatable'";
                 return  '<div class="btn-group">'.
-                    '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#projectProgressModal" onclick="updateProjectProgress('.$project->progress.')">
+                    '<a href="'.route('projects.admin.show_rab', $project->id).'" class="btn btn-primary">
                         <i class="fas fa-tasks"></i>
-                    </button>'.
+                    </a>'.
                     '<a href="'.route('projects.admin.edit',$project->id).'" class="btn btn-warning" ><i class="menu-icon fa fa-pencil-alt"></i></a>'.
                     '<a href="#" onclick="deleteModel('. $deleteUrl .')" class="btn btn-danger" ><i class="menu-icon fa fa-trash"></i></a>'.
                 '</div>';

@@ -25,7 +25,7 @@
                 {data: 'start', name: 'start'},
                 {data: 'end', name: 'end'},
                 {data: 'type', name: 'type'},
-                {data: 'progress', name: 'progress'},
+                {data: 'progress', name: 'progress', orderable: false},
                 {data: 'detail', name: 'detail'},
                 {data: 'assembly_charge', name: 'assembly_charge'},
                 {data: 'product_total', name: 'product_total'},
@@ -35,13 +35,13 @@
             ],
             order: [[ 1, "desc" ]],
             columnDefs: [
-                { width: 300, targets: 1 },
+                { "width": "50%", "targets": 5 },
                 {
                     targets:  '_all',
                     className: 'align-middle'
                 },
-                { 
-                    responsivePriority: 1, targets: 11
+                {
+                    responsivePriority: 2, targets: 11
                 },
             ],
             language: {

@@ -14,4 +14,12 @@ class ProjectDetail extends Model{
         'product_price',
         'product_amount'
     ];
+
+    public $with = [
+        'product'
+    ];
+
+    public function product(){
+        return $this->belongsTo(Product::class, 'product_id');
+    }
 }

@@ -25,13 +25,13 @@
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table id="projectDatatable" cellspacing="0" class="table table-hover" style="width: 100%;">
+                    <table id="projectDatatable" cellspacing="0" class=" table table-hover" style="width: 100%;">
                         <thead>
                             <td><b>No</b></td>
                             <td style="white-space: nowrap;"><b>Nama Proyek</b></td>
                             <td style="white-space: nowrap;"><b>Tanggal Mulai</b></td>
                             <td style="white-space: nowrap;"><b>Target Selesai</b></td>
-                            <td style="white-space: nowrap;"><b>Jenis Pengerjaan</b></td>
+                            <td><b>Pengerjaan</b></td>
                             <td style="white-space: nowrap;"><b>Progress</b></td>
                             <td><b>Detail</b></td>
                             <td><b>Biaya Pemasangan</b></td>
