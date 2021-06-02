@@ -34,6 +34,26 @@ function getProgress($progress){
     }
 }
 
+function getProgressPercentage($progress){
+    switch($progress){
+        case 0:
+            return '20';
+        break;
+        case 1:
+            return '40';
+        break;
+        case 2:
+            return '60';
+        break;
+        case 3:
+            return '80';
+        break;
+        case 4:
+            return '100';
+        break;
+    }
+}
+
 function formatPrice($value){
     return 'Rp '. number_format($value,0,',','.');
 }
