@@ -25,8 +25,8 @@ class DashboardController extends Controller{
         $workload_data = json_encode($this->getProjectWorkload(), true);
         $workload_label = json_encode(['Proyek Baru', 'Pembelian Bahan', 'Pengerjaan', 'Pemasangan', 'Selesai'], true);
 
-        $total_project = $this->projectRepo->getAllData()->count();
-        $unfinished_project = $this->projectRepo->getAllData()->where('progress', '!=', 4)->count();
+        $total_project = $all_project->count();
+        $unfinished_project = $all_project->where('progress', '!=', 4)->count();
 
         $project_deadlines = $this->projectRepo->model()->where('progress', '!=', 4)->orderBy('end', 'ASC')->take(5)->get();
 
@@ -34,13 +34,14 @@ class DashboardController extends Controller{
     }
 
     private function getProjectWorkload(){
+        $all_project = $this->projectRepo->getAllData();
         $workload = [];
 
-        $workload[0] = $this->projectRepo->getAllData()->where('progress', 0)->count();
-        $workload[1] = $this->projectRepo->getAllData()->where('progress', 1)->count();
-        $workload[2] = $this->projectRepo->getAllData()->where('progress', 2)->count();
-        $workload[3] = $this->projectRepo->getAllData()->where('progress', 3)->count();
-        $workload[4] = $this->projectRepo->getAllData()->where('progress', 4)->count();
+        $workload[0] = $all_project->where('progress', 0)->count();
+        $workload[1] = $all_project->where('progress', 1)->count();
+        $workload[2] = $all_project->where('progress', 2)->count();
+        $workload[3] = $all_project->where('progress', 3)->count();
+        $workload[4] = $all_project->where('progress', 4)->count();
 
         return $workload;
     }
