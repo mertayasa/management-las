@@ -180,7 +180,7 @@
                     datasets: [
                         {
                             // lineTension: 0,
-                            label: 'Pengerjaan',
+                            label: 'Progress',
                             borderColor: "#2da15f",
                             backgroundColor: "#2da15f",
                             pointHoverBorderColor: "#2da15f",

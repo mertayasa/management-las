@@ -53,6 +53,7 @@ class ProjectController extends Controller
     }
 
     public function store(Request $request){
+        // dd($request->all());
         try{
             $data = $request->all();
             $new_project = $this->projectRepository->store($data);
@@ -68,6 +69,8 @@ class ProjectController extends Controller
                     array_push($products, $value);
                 }
             }
+
+            // dd($products);
             
             if($data['type'] == 1){
                 $this->additionalWorkerRepository->store($workers, $new_project->id);
@@ -107,6 +110,8 @@ class ProjectController extends Controller
             $update_project = $this->projectRepository->update($data, $project);
             $workers = [];
             $products = [];
+
+            
             
             foreach($data as $key => $value){
                 if(str_contains($key, 'worker')){
@@ -117,6 +122,9 @@ class ProjectController extends Controller
                     array_push($products, $value);
                 }
             }
+
+            Log::info($workers);
+            Log::info($products);
 
             $this->additionalWorkerRepository->model()->where('project_id', $project->id)->delete();
             $this->projectDetailRepository->model()->where('project_id', $project->id)->delete();

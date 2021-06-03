@@ -36,6 +36,14 @@ class Project extends Model{
         return $this->hasMany(ProjectDetail::class);
     }
 
+    // public function getStartAttribute($start){
+    //     return Carbon::parse($start)->format('d-m-Y');
+    // }
+
+    // public function getEndAttribute($end){
+    //     return Carbon::parse($end)->format('d-m-Y');
+    // }
+
     public function getProjectDurationAttribute($value){
         $start_date = Carbon::parse($this->start);
         $end_date = Carbon::parse($this->end);

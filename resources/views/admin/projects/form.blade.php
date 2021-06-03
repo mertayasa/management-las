@@ -74,30 +74,33 @@
             @if (str_contains(Route::currentRouteName(), 'create'))
                 @include('admin.projects.worker_field')
             @else
+                @php
+                    $worker_count = 0
+                @endphp
                 @forelse ($project->additionalWorker as $worker)
                     <div class="row mt-3">
                         <div class="col-5">
                             <div class="col-12 p-0">
                                 {!! Form::label('productName', 'Nama Pegawai') !!}
-                                {!! Form::text('worker[]', $worker->name, ['id' => '', 'class' => 'form-control'])!!}
+                                {!! Form::text('worker'.$worker_count.'[]', $worker->name, ['id' => '', 'class' => 'form-control'])!!}
                             </div>
                         </div>
                         <div class="col-2">
                             <div class="col-12 p-0">
                                 {!! Form::label('productCount', 'Jumlah Hari Kerja') !!}
-                                {!! Form::number('worker[]', $worker->work_day, ['id' => '', 'onchange' => 'countSalary(this)', 'onkeyup' => 'countSalary(this)', 'class' => 'form-control work-day'])!!}
+                                {!! Form::number('worker'.$worker_count.'[]', $worker->work_day, ['id' => '', 'onchange' => 'countSalary(this)', 'onkeyup' => 'countSalary(this)', 'class' => 'form-control work-day'])!!}
                             </div>
                         </div>
                         <div class="col-2">
                             <div class="col-12 p-0">
                                 {!! Form::label('productSumPrice', 'Gaji Per Hari') !!}
-                                {!! Form::number('worker[]', $worker->salary_per_day, ['id' => '', 'onchange' => 'countSalary(this)', 'onkeyup' => 'countSalary(this)', 'class' => 'form-control salary-per-day'])!!}
+                                {!! Form::number('worker'.$worker_count.'[]', $worker->salary_per_day, ['id' => '', 'onchange' => 'countSalary(this)', 'onkeyup' => 'countSalary(this)', 'class' => 'form-control salary-per-day'])!!}
                             </div>
                         </div>
                         <div class="col-2">
                             <div class="col-12 p-0">
                                 {!! Form::label('productSumPrice', 'Total Gaji') !!}
-                                {!! Form::number('worker[]', $worker->work_day * $worker->salary_per_day, ['id' => '', 'readonly', 'class' => 'form-control sum-salary'])!!}
+                                {!! Form::number('worker'.$worker_count.'[]', $worker->work_day * $worker->salary_per_day, ['id' => '', 'readonly', 'class' => 'form-control sum-salary'])!!}
                             </div>
                         </div>
                         <div class="col-1 pt-2">
@@ -105,6 +108,9 @@
                             <button class="btn btn-sm btn-primary mt-4 py-1" type="button" onclick="addNewWorker()">+</button>
                         </div>
                     </div>
+                    @php
+                        $worker_count++
+                    @endphp
                 @empty
                     @include('admin.projects.worker_field')
                 @endforelse
@@ -124,30 +130,33 @@
             @if (str_contains(Route::currentRouteName(), 'create'))
                 @include('admin.projects.product_field')
             @else
+                @php
+                    $product_count = 0
+                @endphp
                 @forelse ($project->projectDetail as $product)
                     <div class="row">
                         <div class="col-5">
                             <div class="col-12 p-0">
                                 {!! Form::label('productName', 'Nama Barang') !!}
-                                {!! Form::select('product1[]', $products, $product->product_id , ['required', 'placeholder' => 'Please Select', 'class' => 'form-control product-id initSelect2', 'onchange' => 'findProductPrice(this)']) !!}
+                                {!! Form::select('product'.$product_count.'[]', $products, $product->product_id , ['required', 'placeholder' => 'Please Select', 'class' => 'form-control product-id initSelect2', 'onchange' => 'findProductPrice(this)']) !!}
                             </div>
                         </div>
                         <div class="col-2">
                             <div class="col-12 p-0">
                                 {!! Form::label('productPrice', 'Harga Barang') !!}
-                                {!! Form::number('product1[]', $product->product_price, ['required', 'id' => '', 'readonly', 'class' => $errors->has('product_price') ? 'form-control is-invalid product-price' : 'form-control product-price'])!!}
+                                {!! Form::number('product'.$product_count.'[]', $product->product_price, ['required', 'id' => '', 'readonly', 'class' => $errors->has('product_price') ? 'form-control is-invalid product-price' : 'form-control product-price'])!!}
                             </div>
                         </div>
                         <div class="col-2">
                             <div class="col-12 p-0">
                                 {!! Form::label('productCount', 'Jumlah Barang') !!}
-                                {!! Form::number('product1[]', $product->product_amount, ['required', 'id' => '', 'onchange' => 'countSumPrice(this)', 'onkeyup' => 'countSumPrice(this)', 'onfocusout' => 'setDefaultValue(this)', 'class' => $errors->has('product_count') ? 'form-control is-invalid product-qty' : 'form-control product-qty'])!!}
+                                {!! Form::number('product'.$product_count.'[]', $product->product_amount, ['required', 'id' => '', 'onchange' => 'countSumPrice(this)', 'onkeyup' => 'countSumPrice(this)', 'onfocusout' => 'setDefaultValue(this)', 'class' => $errors->has('product_count') ? 'form-control is-invalid product-qty' : 'form-control product-qty'])!!}
                             </div>
                         </div>
                         <div class="col-2">
                             <div class="col-12 p-0">
                                 {!! Form::label('productSumPrice', 'Harga X') !!}
-                                {!! Form::number('product1[]', $product->product_price * $product->product_amount, ['required','id' => '', 'readonly', 'class' => $errors->has('product_count') ? 'form-control is-invalid product-sum-price' : 'form-control product-sum-price'])!!}
+                                {!! Form::number('product'.$product_count.'[]', $product->product_price * $product->product_amount, ['required','id' => '', 'readonly', 'class' => $errors->has('product_count') ? 'form-control is-invalid product-sum-price' : 'form-control product-sum-price'])!!}
                             </div>
                         </div>
                         <div class="col-1 pt-2">
@@ -155,6 +164,9 @@
                             <button class="btn btn-sm btn-primary mt-4 py-1" type="button" onclick="addNewProduct()">+</button>
                         </div>
                     </div>
+                    @php
+                        $product_count++
+                    @endphp
                 @empty
                     @include('admin.projects.product_field')
                 @endforelse
@@ -224,8 +236,8 @@
     <script>
         $('.initSelect2').select2({ theme: 'bootstrap4'});
 
-        let productFieldCount = 1
-        let salaryFieldCount = 1
+        let productFieldCount = "{{isset($project->projectDetail) ? count($project->projectDetail) : 1}}"
+        let salaryFieldCount = "{{isset($project->additionalWorker) ? count($project->additionalWorker) : 1}}"
         @if(str_contains(Route::currentRouteName(), 'edit'))
             @if($project->type == 0)
                 let withAdditionalWorker = 0
@@ -249,11 +261,11 @@
             const clonedInput = clone.querySelectorAll('input, select')
             const clonedSelect = clone.querySelectorAll('.product-id')
 
-            let select2Class = `newSelect${productFieldCount+1}`
+            let select2Class = `newSelect${parseInt(productFieldCount)+1}`
             clonedSelect[0].classList.add(select2Class)
 
             clonedInput.forEach(function(input) {
-                input.setAttribute('name', `product${productFieldCount+1}[]`)
+                input.setAttribute('name', `product${parseInt(productFieldCount)+1}[]`)
             });
 
             const productContainer = document.getElementById('productContainer')
@@ -371,7 +383,7 @@
             clone.classList.remove('d-none')
 
             clonedInput.forEach(function(input) {
-                input.setAttribute('name', `worker${salaryFieldCount+1}[]`)
+                input.setAttribute('name', `worker${parseInt(salaryFieldCount)+1}[]`)
             });
 
             workerContainer.appendChild(clone)

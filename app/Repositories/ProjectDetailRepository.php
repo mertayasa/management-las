@@ -27,6 +27,8 @@ class ProjectDetailRepository{
             $project_detail->product_amount = $product[2];
             $project_detail->save();
         }
+        
+        return 1;
         // return $this->project_detail->create($data);
     }
 

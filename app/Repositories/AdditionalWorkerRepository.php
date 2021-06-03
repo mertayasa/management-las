@@ -27,7 +27,7 @@ class AdditionalWorkerRepository{
             $additional_worker->salary_per_day = $worker[2];
             $additional_worker->save();
         }
-        // return $this->additional_worker->create($data);
+        return 1;
     }
 
     public function update($data, $additional_worker){
