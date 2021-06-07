@@ -18,6 +18,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['middleware' => 'auth'], function () {
+    Route::group(['prefix'=>'export','as'=>'export.'], function(){
+        Route::get('print/pdf/{project}', [ProjectController::class, 'exportPdf'])->name('project.pdf');
+    });
+
     Route::group(['prefix'=>'dashboard','as'=>'dashboard.'], function(){
         // Admin
         Route::get('/', [DashboardController::class, 'index'])->name('admin');

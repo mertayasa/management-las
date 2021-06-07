@@ -10,10 +10,12 @@ use App\Repositories\AdditionalWorkerRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\ProjectDetailRepository;
 use App\Repositories\ProjectRepository;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Queue\Worker;
 use Illuminate\Support\Facades\Log;
+use PDF;
 
 class ProjectController extends Controller
 {
@@ -164,5 +166,16 @@ class ProjectController extends Controller
         }
 
         return response(['code' => 1, 'message' => 'Berhasil menghapus proyek']);
+    }
+
+    public function exportPdf(Project $project){
+        // dd($project);
+
+        $title = 'RAB';
+
+        // return view('export.project_pdf', compact('project'));
+    
+        $pdf = PDF::loadview('export.project_pdf',['project' => $project]);
+        return $pdf->download($title.' '.Carbon::now().'.pdf');
     }
 }

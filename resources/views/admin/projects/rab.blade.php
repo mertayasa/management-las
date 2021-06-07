@@ -11,6 +11,9 @@
         <div class="card shadow mb-4">
             <!-- Card Body -->
             <div class="card-body">
+                <a href="{{route('export.project.pdf', $project->id)}}" class="btn btn-primary">
+                    <i class="fas fa-file-pdf"></i> Print PDF
+                </a>
                 <div class="project-info">
                     <div class="project-heading">
                         <h5 class="text-center">{{$project->name}}</h5>
