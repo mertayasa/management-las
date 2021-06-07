@@ -17,9 +17,11 @@
             <div class="card-body">
                 <div class="col-12 p-0 mb-3">
                     <div class="row">
-                        <div class="col-6 align-items-start">
-                            <a href="{{route('projects.admin.create')}}" type="button" class="btn btn-warning mb-3 mr-2">+ Tambah Data</a>
-                        </div>
+                        @if (checkUserLevel() == 'admin')
+                            <div class="col-6 align-items-start">
+                                <a href="{{route('projects.admin.create')}}" type="button" class="btn btn-warning mb-3 mr-2">+ Tambah Data</a>
+                            </div>
+                        @endif
                         <div class="col-6 d-flex">
                         </div>
                     </div>
@@ -32,12 +34,13 @@
                             <td style="white-space: nowrap;"><b>Tanggal Mulai</b></td>
                             <td style="white-space: nowrap;"><b>Target Selesai</b></td>
                             <td><b>Pengerjaan</b></td>
+                            <td style="white-space: nowrap;"><b>Status</b></td>
                             <td style="white-space: nowrap;"><b>Progress</b></td>
-                            <td><b>Detail</b></td>
+                            <td><b>Total Biaya</b></td>
                             <td><b>Biaya Pemasangan</b></td>
                             <td><b>Biaya Bahan Baku</b></td>
                             <td><b>Biaya Tukang</b></td>
-                            <td><b>Total Biaya</b></td>
+                            <td><b>Detail</b></td>
                             <td><b>Aksi</b></td>
                         </thead>
                         <tbody></tbody>
@@ -77,13 +80,38 @@
 @include('admin.projects.datatable')
 <script>
 
-    function updateStatusProyek(update, modelId){
+    function updateProgressProyek(update, modelId){
         const url = "{{url('projects/update-progress')}}" + '/' + modelId
         console.log(url)
         $.ajax({
             url:url,
             method:'patch',
             data:{"progress": update, "_token": "{{ csrf_token() }}"},
+            dataType:'json',
+            beforeSend:function(){
+                console.log('begin update')
+            },
+            success:function(data)
+            {
+                console.log(data)
+                if(data.code = 1){
+                    console.log('success')
+                }
+
+                if(data.code = 0){
+                    console.log('fail')
+                }
+            }
+        })
+    }
+
+    function updateApproved(update, modelId){
+        const url = "{{url('projects/update-approved')}}" + '/' + modelId
+        console.log(url)
+        $.ajax({
+            url:url,
+            method:'patch',
+            data:{"approved": update, "_token": "{{ csrf_token() }}"},
             dataType:'json',
             beforeSend:function(){
                 console.log('begin update')

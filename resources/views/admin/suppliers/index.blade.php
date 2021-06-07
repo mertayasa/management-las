@@ -19,9 +19,11 @@
             <div class="card-body">
                 <div class="col-12 p-0 mb-3">
                     <div class="row">
-                        <div class="col-6 align-items-start">
-                            <a href="{{route('suppliers.admin.create')}}" type="button" class="btn btn-warning mb-3 mr-2">+ Tambah Data</a>
-                        </div>
+                        @if (checkUserLevel() == 'admin')
+                            <div class="col-6 align-items-start">
+                                <a href="{{route('suppliers.admin.create')}}" type="button" class="btn btn-warning mb-3 mr-2">+ Tambah Data</a>
+                            </div>
+                        @endif
                         <div class="col-6 d-flex">
                         </div>
                     </div>
@@ -34,7 +36,9 @@
                         <td><b>Nama</b></td>
                         <td><b>Telpon</b></td>
                         <td><b>Alamat</b></td>
-                        <td><b>Aksi</b></td>
+                        @if (checkUserLevel() == 'admin')
+                            <td><b>Aksi</b></td>
+                        @endif
                     </thead>
                     <tbody></tbody>
                 </table>

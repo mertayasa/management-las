@@ -14,6 +14,12 @@
 
     function datatable (url){
 
+        @if (checkUserLevel() == 'admin')
+            width50 = 6
+        @else
+            width50 = 5
+        @endif
+
         table = $('#projectDatatable').DataTable({
             processing: true,
             serverSide: true,
@@ -25,23 +31,24 @@
                 {data: 'start', name: 'start'},
                 {data: 'end', name: 'end'},
                 {data: 'type', name: 'type'},
+                {data: 'approved', name: 'approved'},
                 {data: 'progress', name: 'progress', orderable: false},
-                {data: 'detail', name: 'detail'},
+                {data: 'total', name: 'total'},
                 {data: 'assembly_charge', name: 'assembly_charge'},
                 {data: 'product_total', name: 'product_total'},
                 {data: 'worker_salary', name: 'worker_salary'},
-                {data: 'total', name: 'total'},
+                {data: 'detail', name: 'detail'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
             ],
             order: [[ 1, "desc" ]],
             columnDefs: [
-                { "width": "50%", "targets": 5 },
+                { "width": "50%", "targets": width50 },
                 {
                     targets:  '_all',
                     className: 'align-middle'
                 },
                 {
-                    responsivePriority: 2, targets: 11
+                    responsivePriority: 1, targets: 12
                 },
             ],
             language: {

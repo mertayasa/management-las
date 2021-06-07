@@ -157,6 +157,17 @@ class ProjectController extends Controller
         return response(['code' => 1]);
     }
 
+    public function updateApproved(Request $request, Project $project){
+        try{
+            $data = $request->all();
+            $this->projectRepository->update($data, $project);
+        }catch(Exception $e){
+            Log::info($e->getMessage());
+            return response(['code' => 0]);
+        }
+        return response(['code' => 1]);
+    }
+
     public function destroy(Project $project){
         try{
             $this->projectRepository->destroy($project);

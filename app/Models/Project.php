@@ -21,6 +21,7 @@ class Project extends Model{
         'detail',
         'type',
         'progress',
+        'approved',
         'assembly_charge'
     ];
 

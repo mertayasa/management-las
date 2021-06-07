@@ -1,5 +1,6 @@
 <?php
 
+use Collective\Html\FormFacade;
 use Illuminate\Support\Facades\Auth;
 
 function checkUserLevel(){
@@ -56,4 +57,22 @@ function getProgressPercentage($progress){
 
 function formatPrice($value){
     return 'Rp '. number_format($value,0,',','.');
+}
+
+function isApproved($project){
+    if(Auth::user()->level == 0){
+        switch($project->approved){
+            case 0 :
+                return '<span class="badge badge-warning">Belum Disetujui</span>';
+            break;
+            case 1 :
+                return '<span class="badge badge-success">Disetujui</span>';
+            break;
+            case 2 :
+                return '<span class="badge badge-danger">Ditolak</span>';
+            break;
+        }
+    }else{
+        return FormFacade::select('type', [0 => 'Belum Disetujui', 1 => 'Disetujui', 2 => 'Ditolak'], $project->approved, ['id' => 'projectApproved', 'onchange' => 'updateApproved(this.value, '. $project->id .')', 'class' => 'form-control']);
+    }
 }
